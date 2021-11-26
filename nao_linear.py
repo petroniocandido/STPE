@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Discretiza o Espaço Amostral de uma Série Temporal para 
 # criar uma distribuição de probabilidade discreta
