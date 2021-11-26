@@ -99,3 +99,9 @@ def tv_ar_kalman(dados, p, alfa=.9):
     tau = np.std(res_a)
 
   return ret[p:]
+
+def tv_arma_kalman(dados, p, q, alfa=.9, beta=.1):
+  estimativas_ar = tv_ar_kalman(dados, p, alfa)
+  residuos_ar = dados[p:] - estimativas_ar
+  estimativas_ma = tv_ar_kalman(residuos_ar, q, beta)
+  return estimativas_ar[q:] + estimativas_ma
