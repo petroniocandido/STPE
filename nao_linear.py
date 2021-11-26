@@ -2,6 +2,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+#----------------------------------------------------------------------------
+#   MÉTRICAS
+#----------------------------------------------------------------------------
+
+
 # Discretiza o Espaço Amostral de uma Série Temporal para 
 # criar uma distribuição de probabilidade discreta
 def binning(X, nbins):
@@ -159,8 +164,12 @@ def plot_cross_ami(X, Y, k, **kwargs):
   ax.set_ylabel("AMI(k)")
   ax.set_ylim([0,1.05])
   
+
+#----------------------------------------------------------------------------
+#   MODELOS UNIVARIADOS
+#----------------------------------------------------------------------------
   
- # Defasagens 
+# Defasagens 
 def lags(dados, p):
   T, n = dados.shape
   X = np.zeros((T-p, n*p))
@@ -248,6 +257,9 @@ def narma(dados, p, q, parametros, **kwargs):
                     ativacao_camada2 = FuncoesAtivacao.identidade)
   return np.array(np.array(y1[q:]) + np.array(y2))
 
+#----------------------------------------------------------------------------
+#   MODELOS MULTIVARIADOS
+#----------------------------------------------------------------------------
 
 def ajustar_nvar(dados, p, **kwargs):
   X,Y = lags(dados, p)
