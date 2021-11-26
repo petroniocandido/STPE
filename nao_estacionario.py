@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+#----------------------------------------------------------------------------
+#   AR(1) VARIANTE NO TEMPO 
+#----------------------------------------------------------------------------
 
 def tv_ar1(dados, beta):
   n = len(dados)
@@ -16,12 +19,19 @@ def tv_ar1(dados, beta):
   
   return ret[2:]
 
+#----------------------------------------------------------------------------
+#   ARMA(1,1) VARIANTE NO TEMPO 
+#----------------------------------------------------------------------------
 
 def tv_arma11(dados, gamma, delta):
   previsoes_ar = tv_ar1(dados, gamma)
   residuos_ar = dados[2:] - previsoes_ar
   previsoes_ma = tv_ar1(residuos_ar, delta)
   return previsoes_ar[2:] + previsoes_ma
+
+#----------------------------------------------------------------------------
+#   AR VARIANTE NO TEMPO COM FILTRO DE KALMAN 
+#----------------------------------------------------------------------------
 
 
 def kalman_predicao(a, V, F, G, tau):
