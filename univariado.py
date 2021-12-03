@@ -130,7 +130,7 @@ def es(Y, parametros):
   n = len(Y)
   ret = np.zeros(n - ordem)
   for i in range(ordem, n):
-    ret[i-ordem] = np.sum([alfa * (1 - alfa)** j * Y[i - j] for j in range(0, ordem)])
+    ret[i-ordem] = np.sum([alfa * (1 - alfa)** j * Y[i - j - 1] for j in range(0, ordem)])
   return ret
 
 
