@@ -38,3 +38,52 @@ def momento_normalizado(px, n):
   for x in px.keys():
     ret += ((x - mu)/sigma) ** n * px[x]
   return ret
+
+def E(X, **kwargs):
+  m,n = X.shape
+  e = 0.0
+  modo = kwargs.get("modo", "realizacao") # tempo, realizacao, ensemble
+  if modo == "tempo":
+    t = kwargs.get("t", 0)
+    e = X[:, t].mean()
+  elif modo == "realizacao":
+    r = kwargs.get("r", 0)
+    e = X[r, :].mean()
+  else:
+    e = X.mean()
+  return e
+
+def Var(X, k, **kwargs):
+  m,n = X.shape
+  mx = E(X, **kwargs)
+  v = 0.0
+  modo = kwargs.get("modo", "realizacao") # tempo, realizacao, ensemble
+  if modo == "tempo":
+    t = kwargs.get("t", 0)
+    v = np.mean( (X[:, t] - mx)**2 )
+  elif modo == "realizacao":
+    r = kwargs.get("r", 0)
+    v = np.mean( (X[r, :] - mx)**2 )
+  else:
+    v = np.mean( (X - mx)**2 )
+  return v
+
+def Cov(X, k, **kwargs):
+  m,n = X.shape
+  modo = kwargs.get("modo", "realizacao")
+  mx = E(X, **kwargs)
+  
+  if modo == "realizacao":
+    c = np.zeros(n-k)
+    r = kwargs.get("r", 0)
+    for i in range(n - k):
+      c[i] = (X[r,i] - mx)*(X[r,i+k] - mx)
+  else:
+    c = np.zeros((m, n-k))
+    for r in range(m):
+      for i in range(n - k):
+        c[r, i] = (X[r,i] - mx)*(X[r,i+k] - mx)
+
+  c = c.mean()
+  
+  return c
