@@ -4,12 +4,14 @@ import matplotlib.pyplot as plt
 
 
 def naive(dados, parametros):
+  ''' Método Naïve: ŷ(t+1) = y(t) '''
   ret = np.zeros(len(dados)-1)  
   ret = dados[:-1]
   return ret
 
 
 def lags(dados, p):
+  ''' Dado um conjunto de dados, calcula as matrizes X e Y de defasagens de um processo autoregressivo de ordem p '''
   n = len(dados)
   X = np.zeros((n-p, p))
   Y = dados[p:]
@@ -19,6 +21,10 @@ def lags(dados, p):
 
 
 def ajustar_ar(dados, parametros):
+  '''
+  AR(p) - Função de estimação de parâmetros.
+  Usando o método de Mínimos Quadrados Ordinários, ajusta os coeficientes de um processo autoregressivo de ordem p. 
+  '''
   p = parametros[0]
   X,Y = lags(dados, p)
   coef = np.linalg.inv(X.T.dot(X)).dot( X.T.dot(Y) )
@@ -26,6 +32,10 @@ def ajustar_ar(dados, parametros):
 
 
 def ar(dados, coef):
+  '''
+  AR(p) - Função de inferência.
+  Estima os próximos valores de um processo autoregressivo de ordem p usando coeficientes dados
+  '''
   p = len(coef)
   n = len(dados)
   ret = np.zeros(n-p)
@@ -36,6 +46,11 @@ def ar(dados, coef):
 
 
 def ajustar_arma(dados, parametros):
+  ''''
+  ARMA(p,q) - Função de estimação de parâmetros.
+  Usando o método de Mínimos Quadrados Ordinários, ajusta os coeficientes de um processo autoregressivo 
+  de ordem p com médias móveis de ordem q. 
+  '''
   p, q = parametros
 
   # Ajusta o Modelo AR(p)
@@ -63,6 +78,10 @@ def ajustar_arma(dados, parametros):
 
 
 def arma(dados, parametros):
+  ''''
+  ARMA(p,q) - Função de inferência.
+  Estima os próximos valores de um processo autoregressivo de ordem p com médias móveis de ordem q usando coeficientes dados 
+  '''
   alfa, beta, sigma = parametros
   p = len(alfa)
   q = len(beta)
@@ -96,6 +115,11 @@ def integrar(dados, ordem=1, inicial = 0):
 
 
 def ajustar_arima(dados, parametros):
+  ''''
+  ARIMA(p,d,q) - Função de estimação de parâmetros.
+  Usando o método de Mínimos Quadrados Ordinários, ajusta os coeficientes de um processo autoregressivo 
+  de ordem p, com diferenciação integrada de ordem d e médias móveis de ordem q. 
+  '''
   p, d, q = parametros
   dados_diff = diferenciar(dados, ordem=d)
   alfa = ajustar_ar(dados_diff, [p])
@@ -112,6 +136,11 @@ def ajustar_arima(dados, parametros):
 
 
 def arima(dados, parametros):
+  ''''
+  ARIMA(p,d,q) - Função de inferência.
+  Estima os próximos valores de um processo autoregressivo de ordem p, com diferenciação integrada 
+  de ordem d e médias móveis de ordem q usando coeficientes dados 
+  '''
   alfa, beta, d, sigma = parametros
   n = len(dados)
   p = len(alfa)
@@ -126,6 +155,7 @@ def arima(dados, parametros):
 
 
 def es(Y, parametros):
+  ''' Alisamento Esponencial (Exponential Smoothing) de ordem p e expoente alfa '''
   alfa, ordem = parametros
   n = len(Y)
   ret = np.zeros(n - ordem)
