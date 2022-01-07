@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 
 def phi(px):
+  ''' Função característica da PMF P(x) '''
   rads = np.linspace(-np.pi, np.pi, 100)
   ret = { w : np.sum([px[x] * np.exp(w*1j*x) for x in px.keys()]) for w in rads}
   return ret
@@ -17,6 +18,7 @@ def phi_plot(px, ax):
   
 
 def momento(px, n):
+  ''' Gera o momento de n-enésima ordem da PMF P(x) '''
   ret = 0
   for x in px.keys():
     ret += (x ** n) * px[x]
@@ -24,6 +26,7 @@ def momento(px, n):
 
 
 def momento_central(px, n):
+  ''' Gera o momento central de n-enésima ordem da PMF P(x) '''
   mu = momento(px, 1)
   ret = 0
   for x in px.keys():
@@ -32,6 +35,7 @@ def momento_central(px, n):
 
 
 def momento_normalizado(px, n):
+  ''' Gera o momento central normalizado de n-enésima ordem da PMF P(x) '''
   mu = momento(px, 1)
   sigma = momento_central(px, 2)
   ret = 0
@@ -40,6 +44,7 @@ def momento_normalizado(px, n):
   return ret
 
 def E(X, **kwargs):
+  ''' Calcula o valor esperado da PMF P(x) '''
   m,n = X.shape
   e = 0.0
   modo = kwargs.get("modo", "realizacao") # tempo, realizacao, ensemble
@@ -54,6 +59,7 @@ def E(X, **kwargs):
   return e
 
 def Var(X, k, **kwargs):
+  ''' Calcula a variância da PMF P(x) '''
   m,n = X.shape
   mx = E(X, **kwargs)
   v = 0.0
@@ -69,6 +75,8 @@ def Var(X, k, **kwargs):
   return v
 
 def Cov(X, k, **kwargs):
+  ''' Calcula a autocovariância do processo estocástico X para a defasagem k '''
+  
   m,n = X.shape
   modo = kwargs.get("modo", "realizacao")
   mx = E(X, **kwargs)
