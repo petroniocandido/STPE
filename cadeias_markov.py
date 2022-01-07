@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 
 
 def P_cumulativa(pi):
+  ''' Calcula a CDF F(x) de uma PMF P(x) '''
   pif = [pi[0]]
   for i in range(1, len(pi)):
     pif.append( pif[-1] + pi[i])
@@ -10,6 +11,7 @@ def P_cumulativa(pi):
 
 
 def escolhe_estado(S, fpi):
+  ''' Dada uma Cadeia de Markov com vetor de estados S e CDF F(i), escolhe aleatoriamente o próximo estado ''' 
   r = np.random.rand(1)[0]
   for i in range(len(S)):
     if fpi[i] >= r:
@@ -17,6 +19,10 @@ def escolhe_estado(S, fpi):
 
     
 def simular_cadeia_markov(S, pi, P, n, m):
+  ''' 
+  Realiza m simulações numéricas com n instâncias de uma Cadeia de Markov com estados S, 
+  probabilidades iniciais pi e matriz de transição P 
+  ''' 
   processo = np.zeros((m,n))
   for j in range(m):
     pi_t = pi
@@ -29,15 +35,22 @@ def simular_cadeia_markov(S, pi, P, n, m):
   return processo
 
 def mat_pot(mat, n):
+  ''' Função atalho para a exponenciação de matrizes '''
   return np.linalg.matrix_power(mat, n)
 
 def e_regular(mat, n):
+  ''' Indica se a matriz mat elevada à potência n é regular, isto é, todos os seus valores são maiores que zero. '''
   return np.all(mat_pot(mat,n) > 0)
 
 def transicao(pi, P, n):
+  ''' Calcula analiticamente o vetor de estados após n transições de uma Cadeia de Markov com matriz de transição P ''' 
   return pi.dot(mat_pot(P, n))
 
 def simular_convergencia(S, pi, P, n, nomes=None):
+  ''' 
+  Avalia numericamente e visualmente a convergência para n passos de uma Cadeia de Markov com estados S, 
+  probabilidades iniciais pi e matriz de transição P  
+  '''
   pit = pi
   ns = pi.shape[0]
   pis = np.zeros((n,ns))
@@ -50,6 +63,10 @@ def simular_convergencia(S, pi, P, n, nomes=None):
   plt.tight_layout()
   
 def dist_estacionaria(S, P):
+  ''' 
+  Calcula analiticamente a distribuição estacionária de uma Cadeia de Markov com estados S, 
+  e matriz de transição P
+  '''
   m = len(S)
   A = np.append(P.T - np.identity(m), np.ones((1,m)),axis=0)
   b = np.zeros(m+1)
